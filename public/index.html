@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link
+      rel="stylesheet"
+      href="./main.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    />
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+
+    <script src="./app.js"></script>
+  </head>
+
+  <body>
+    <div class="topnav">
+      <a
+        class="active"
+        href="/"
+        >Home</a
+      >
+    </div>
+
+    <div
+      class="main_section"
+      ng-app="books_webstore"
+      ng-controller="MainController"
+    >
+      <div
+        ng-if="!userIsAuthed"
+        class="login_part"
+      >
+        <h2>Login</h2>
+        <form
+          name="1"
+          ng-submit="login()"
+        >
+          <label for="username_input">Username : </label>
+          <input
+            id="username_input"
+            type="text"
+            name="username"
+            ng-model="userData.username"
+          />
+          <div ng-if="error">
+            <div id="error_place">{{error}}</div>
+          </div>
+          <button
+            class="login_submit_button"
+            type="submit"
+          >
+            Login
+          </button>
+        </form>
+      </div>
+      <div
+        ng-if="userIsAuthed"
+        class="dasheboard_part"
+      >
+        <h1>Dasheboard</h1>
+        <div class="greeting">
+          <h4>Welcome, {{userData.username}}</h4>
+        </div>
+        <div>
+          <div class="tools_picker">
+            <div class="search_bar">
+              <form
+                name="2"
+                ng-submit="search()"
+              >
+                <input
+                  type="text"
+                  ng-model="dataFilter.search_q"
+                  name="search_q"
+                  placeholder="any ..."
+                  class="search_query"
+                />
+                <button
+                  class="search_query"
+                  type="submit"
+                >
+                  Search
+                </button>
+
+                <span
+                  ng-click="queryOptionsTools=!queryOptionsTools"
+                  style="float: right"
+                  class="queryOptionsBox"
+                  >{{ !queryOptionsTools?"Expand Filters (+)":"Shrink Filters
+                  (-)" }}</span
+                >
+                <br />
+                <br />
+
+                <div
+                  class="query_options queryOptionsBox"
+                  ng-if="queryOptionsTools"
+                >
+                  <div
+                    class="curved_border"
+                    ng-click="showVolumesOptions=!showVolumesOptions"
+                  >
+                    Filter in specific book attribute
+                  </div>
+                  <div
+                    class="volumes"
+                    ng-if="showVolumesOptions"
+                  >
+                    <div>
+                      <input
+                        type="radio"
+                        id="all1"
+                        value="all"
+                        ng-model="dataFilter.volumes"
+                        checked="checked"
+                      />
+                      <label for="all1">all</label>
+                    </div>
+
+                    <div>
+                      <input
+                        type="radio"
+                        id="intitle"
+                        value="intitle"
+                        ng-model="dataFilter.volumes"
+                      />
+                      <label for="intitle">intitle</label>
+                    </div>
+                    <div>
+                      <input
+                        type="radio"
+                        id="inauthor"
+                        value="inauthor"
+                        ng-model="dataFilter.volumes"
+                      />
+                      <label for="inauthor">inauthor</label>
+                    </div>
+                    <div>
+                      <input
+                        type="radio"
+                        id="inpublisher"
+                        value="inpublisher"
+                        ng-model="dataFilter.volumes"
+                      />
+                      <label for="inpublisher">inpublisher</label>
+                    </div>
+                    <div>
+                      <input
+                        type="radio"
+                        id="subject"
+                        value="subject"
+                        ng-model="dataFilter.volumes"
+                      />
+                      <label for="subject">subject</label>
+                    </div>
+                    <div>
+                      <input
+                        type="radio"
+                        id="isbn"
+                        value="isbn"
+                        ng-model="dataFilter.volumes"
+                      />
+                      <label for="isbn">isbn</label>
+                    </div>
+                    <div>
+                      <input
+                        type="radio"
+                        id="lccn"
+                        value="lccn"
+                        ng-model="dataFilter.volumes"
+                      />
+                      <label for="lccn">lccn</label>
+                    </div>
+                    <div>
+                      <input
+                        type="radio"
+                        id="oclc"
+                        value="oclc"
+                        ng-model="dataFilter.volumes"
+                      />
+                      <label for="oclc">oclc</label>
+                    </div>
+                  </div>
+
+                  <div
+                    class="curved_border"
+                    ng-click="showFiltersOptions=!showFiltersOptions"
+                  >
+                    Your query is ____ of the item you aspect
+                  </div>
+                  <div
+                    class="filters"
+                    ng-if="showFiltersOptions"
+                  >
+                    <div>
+                      <input
+                        type="radio"
+                        id="all2"
+                        ng-model="dataFilter.filters"
+                        value="all"
+                        checked="checked"
+                      />
+                      <label for="all2">all</label><br />
+                    </div>
+                    <div>
+                      <input
+                        type="radio"
+                        id="partial"
+                        ng-model="dataFilter.filters"
+                        value="partial"
+                      />
+                      <label for="partial">partial</label><br />
+                    </div>
+                    <div>
+                      <input
+                        type="radio"
+                        id="full"
+                        ng-model="dataFilter.filters"
+                        value="full"
+                      />
+                      <label for="full">full</label><br />
+                    </div>
+                    <div>
+                      <input
+                        type="radio"
+                        id="free-ebooks"
+                        ng-model="dataFilter.filters"
+                        value="free-ebooks"
+                      />
+                      <label for="free-ebooks">free-ebooks</label><br />
+                    </div>
+                    <div>
+                      <input
+                        type="radio"
+                        id="paid-ebooks"
+                        ng-model="dataFilter.filters"
+                        value="paid-ebooks"
+                      />
+                      <label for="paid-ebooks">paid-ebooks</label><br />
+                    </div>
+                    <div>
+                      <input
+                        type="radio"
+                        id="ebooks"
+                        ng-model="dataFilter.filters"
+                        value="ebooks"
+                      />
+                      <label for="ebooks">ebooks</label><br />
+                    </div>
+                  </div>
+
+                  <div
+                    class="curved_border"
+                    ng-click="showPrintTypeOptions=!showPrintTypeOptions"
+                  >
+                    Book type options
+                  </div>
+                  <div
+                    class="print_type"
+                    ng-if="showPrintTypeOptions"
+                  >
+                    <div>
+                      <input
+                        type="radio"
+                        id="all3"
+                        ng-model="dataFilter.print_type"
+                        value="all"
+                      />
+                      <label for="all3">all</label><br />
+                    </div>
+                    <div>
+                      <input
+                        type="radio"
+                        id="books"
+                        ng-model="dataFilter.print_type"
+                        value="books"
+                      />
+                      <label for="books">books</label><br />
+                    </div>
+                    <div>
+                      <input
+                        type="radio"
+                        id="magazines"
+                        ng-model="dataFilter.print_type"
+                        value="magazines"
+                      />
+                      <label for="magazines">magazines</label><br />
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="total_items_container">
+            <div
+              style="text-align: center; width: 100%; margin-bottom: 15px"
+              class="total_items_place"
+            >
+              order by :
+              <button
+                class="sort_buttons active"
+                ng-click="search(null,'relevance')"
+                ng-class="{ 'active': isActive('relevance') }"
+              >
+                Relevance
+              </button>
+              <button
+                class="sort_buttons"
+                ng-click="search(null,'newest')"
+                ng-class="{ 'active': isActive('newest') }"
+              >
+                Newest
+              </button>
+            </div>
+          </div>
+          <div class="total_items_container">
+            <div class="total_items_place">Results : {{totalItems}} books</div>
+            <div class="total_items_place">
+              <input
+                class="per_page_input"
+                ng-model="maxResult"
+                type="number"
+                max="40"
+                min="2"
+                ng-change="search(maxResult)"
+              />
+              per page
+            </div>
+
+            <div
+              class="total_items_place"
+              style="float: right"
+            >
+              <div>
+                <button
+                  class="sort_buttons"
+                  ng-click="search(-1)"
+                >
+                <i class="fa-solid fa-arrow-left"></i>
+                </button>
+                <span
+                  class="sort_buttons"
+                  style="font-size: 87%"
+                  >{{currentPage}} / {{maxPage+1}}</span
+                >
+                <button
+                  class="sort_buttons"
+                  ng-click="search(1)"
+                >
+                  <i class="fa-solid fa-arrow-right"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          <br />
+
+          <ul class="flex_container">
+            <li
+              ng-repeat="item in dataList"
+              class="flex_items"
+            >
+              <div class="book_card">
+                <div
+                  ng-if="!item.expanded === false"
+                  class="big-card"
+                  ng-class="{ 'expanded': !item.expanded === false }"
+                >
+                  <div class="big_card_header">
+                    <div
+                      ng-click="item.expanded=false"
+                      class="close_button"
+                    >
+                      <strong>Close</strong>
+                    </div>
+                  </div>
+                  <div class="big_card_body">
+                    <br />
+                    <br />
+
+                    <div>
+                      <strong>Title : </strong>{{ item.volumeInfo.title }}.
+                      <a
+                        ng-if="item.additionalData.volumeInfo.infoLink != ''"
+                        href="{{item.additionalData.volumeInfo.infoLink}}"
+                        ><i class="fa fa-info"></i
+                      ></a>
+                    </div>
+                    <div ng-if="item.additionalData.subtitle">
+                      <div>
+                        <strong>Subtitle:</strong>
+                        {{item.additionalData.subtitle}}.
+                      </div>
+                    </div>
+                    <div ng-if="item.volumeInfo.authors.length > 0">
+                      <strong>Author/s : </strong
+                      ><span ng-repeat="writer in item.volumeInfo.authors">
+                        {{ writer }}{{item.volumeInfo.authors.length > 1?'
+                        ,':''}}
+                      </span>
+                      <br />
+                    </div>
+                    <div>
+                      <strong>Publisher : </strong>{{
+                      item.additionalData.volumeInfo.publisher }}. <br />
+                    </div>
+                    <div>
+                      <strong>Published Date : </strong>{{
+                      item.volumeInfo.publishedDate }}. <br />
+                    </div>
+                    <div ng-if="item.additionalData.volumeInfo.description">
+                      <strong>Description : </strong>{{
+                      item.additionalData.volumeInfo.description }}.<br />
+                    </div>
+                    <div
+                      ng-if="item.additionalData.volumeInfo.categories.length > 0"
+                    >
+                      <strong>Categories : </strong
+                      ><span
+                        ng-repeat="writer in item.additionalData.volumeInfo.categories"
+                      >
+                        {{ writer
+                        }}{{item.additionalData.volumeInfo.categories.length >
+                        1?' ,':''}}
+                      </span>
+                      <br />
+                    </div>
+                    <div ng-if="item.volumeInfo.languages">
+                      <strong>Languages : </strong>{{
+                      item.additionalData.volumeInfo.languages }}
+                      <br />
+                    </div>
+                    <div
+                      ng-if="item.additionalData.volumeInfo.ratings.averageRating"
+                    >
+                      <strong>Average Rating : </strong>{{
+                      item.additionalData.volumeInfo.ratings.averageRating }}
+                      <br />
+                    </div>
+                    <div
+                      ng-if="item.additionalData.volumeInfo.reviews.totalItems"
+                    >
+                      <strong>Total Reviews : </strong>{{
+                      item.additionalData.volumeInfo.reviews.totalItems }}
+                      <br />
+                    </div>
+                    <div ng-if="item.additionalData.volumeInfo.pageCount">
+                      <strong>Page Count : </strong>{{
+                      item.additionalData.volumeInfo.pageCount }}
+                    </div>
+                    <div
+                      ng-if="item.additionalData.volumeInfo.dimensions.height"
+                    >
+                      <span
+                        ><strong>height : </strong>{{
+                        item.additionalData.volumeInfo.dimensions.height
+                        }}</span
+                      >
+                      <span
+                        ng-if="item.additionalData.volumeInfo.dimensions.width"
+                        >,
+                        <strong>width : </strong
+                        >{{item.additionalData.volumeInfo.dimensions.width}}
+                      </span>
+                    </div>
+                    <div ng-if="item.additionalData.volumeInfo.weight">
+                      <strong>Weight : </strong>{{
+                      item.additionalData.volumeInfo.weight }}
+                    </div>
+                    <strong>ISBN : </strong>{{
+                    item.volumeInfo.industryIdentifiers[0].identifier }} <br />
+                    <img
+                      ng-if="item.volumeInfo.imageLinks.thumbnail!= ''"
+                      style="float: right"
+                      ng-src="{{item.additionalData.volumeInfo.imageLinks.thumbnail}}"
+                      width="250"
+                    />
+                    <div ng-if="item.additionalData.volumeInfo.language">
+                      <strong>Language Code : </strong>{{
+                      item.additionalData.volumeInfo.language }}
+                    </div>
+                    <div ng-if="item.additionalData.volumeInfo.maturityRating">
+                      <strong>Maturity Rating : </strong>{{
+                      item.volumeInfo.maturityRating }}
+                    </div>
+                    <div
+                      ng-if="item.additionalData.accessInfo.epub.readingModes"
+                    >
+                      <strong>Reading Modes : </strong>{{
+                      item.additionalData.accessInfo.epub.readingModes }} <br />
+                    </div>
+                    <div ng-if="item.additionalData.accessInfo.printType">
+                      <strong>Type : </strong>{{
+                      item.additionalData.accessInfo.printType.toLowerCase() }}
+                      <br />
+                    </div>
+                    <div ng-if="item.additionalData.accessInfo.contentVersion">
+                      <strong>Version : </strong>{{
+                      item.additionalData.accessInfo.contentVersion }} <br />
+                    </div>
+
+                    <div class="links">
+                      <strong>Links : </strong><br />
+                      <a
+                        ng-if="item.additionalData.volumeInfo.previewLink != ''"
+                        href="{{item.additionalData.volumeInfo.previewLink}}"
+                        >preview
+                      </a>
+                      <br />
+                      <a
+                        ng-if="item.additionalData.accessInfo.webReaderLink"
+                        href="{{item.additionalData.accessInfo.webReaderLink}}"
+                        >web reader</a
+                      >
+                      <a
+                        ng-if="item.additionalData.saleInfo.buyLink"
+                        href="{{item.saleInfo.buyLink}}"
+                        >Buy</a
+                      ><br />
+                      <a
+                        ng-if="item.additionalData.accessInfo.pdf.isAvailable"
+                        href="{{item.accessInfo.pdf.downloadLink}}"
+                        >Download</a
+                      >
+                    </div>
+                  </div>
+                </div>
+
+                <div class="card_buttons">
+                  <a
+                    href="#"
+                    class="sort_buttons"
+                    ng-click="expandItem(item)"
+                    ><i class="fa fa-plus"></i
+                  ></a>
+                  <a
+                    href="#"
+                    class="sort_buttons"
+                    ng-click="addToFavorites(item)"
+                  >
+                    <i
+                      ng-if="item.isFavorite"
+                      ng-click="item.isFavorite=false"
+                      class="fa fa-star"
+                    ></i>
+                    <i
+                      ng-if="!item.isFavorite"
+                      ng-click="setAsFavoriteBook(item)"
+                      class="fa-regular fa-star"
+                    ></i>
+                  </a>
+                </div>
+                <hr />
+                <div class="card_header">
+                  <div class="card_title">
+                    <strong>Title :</strong> {{ item.volumeInfo.title }}
+                  </div>
+                  <span
+                    class="card_sub_title"
+                    ng-if="item.volumeInfo.subtitle"
+                  >
+                    {{ item.volumeInfo.subtitle }}
+                  </span>
+                  <div>{{item.volumeInfo.pageCount}} pages</div>
+                  ({{ item.volumeInfo.publishedDate }})
+                </div>
+
+                <img
+                  ng-if="item.volumeInfo.imageLinks.thumbnail!= ''"
+                  style="float: right"
+                  ng-src="{{item.volumeInfo.imageLinks.thumbnail}}"
+                  width="115"
+                />
+                <div class="card_body">
+                  <div
+                    class="card_authors"
+                    ng-if="item.volumeInfo.authors.length > 0"
+                  >
+                    <strong>Author/s :</strong>
+                    <ul class="horizontal_list">
+                      <li ng-repeat="authore in item.volumeInfo.authors">
+                        <span>{{authore}}</span>
+                      </li>
+                    </ul>
+                  </div>
+                  <br />
+                  <div
+                    class="card_authors"
+                    ng-if="item.volumeInfo.categories.length > 0"
+                  >
+                    <strong>Categories :</strong>
+                    <ul class="horizontal_list">
+                      <li ng-repeat="cat in item.volumeInfo.categories">
+                        <span>{{cat}}</span>
+                      </li>
+                    </ul>
+                  </div>
+                  <a
+                    ng-if="item.volumeInfo.previewLink"
+                    href="{{item.volumeInfo.previewLink}}"
+                    >priview pdf</a
+                  ><br />
+                  <a
+                    ng-if="item.saleInfo.buyLink"
+                    href="{{item.saleInfo.buyLink}}"
+                    >Buy</a
+                  ><br />
+                  <a
+                    ng-if="item.accessInfo.pdf.isAvailable"
+                    href="{{item.accessInfo.pdf.downloadLink}}"
+                    >Download</a
+                  >
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
