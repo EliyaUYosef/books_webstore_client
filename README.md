@@ -27,7 +27,7 @@ My Bookstore Web App is a simple web application built with AngularJS, HTML, CSS
 # # Demo : 
    https://books-webstore-client.onrender.com/
    
-Usage
+# # Usage
 Search for books by entering keywords, authors, or titles in the search bar.
 Click on a book to view its details.
 Click the "Add to Favorites" button to add a book to your favorites.
