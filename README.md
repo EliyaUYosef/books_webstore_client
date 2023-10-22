@@ -36,7 +36,15 @@ Styling is done with CSS.
 The Google Books API is used for book data.
 And HTML for layouts
 
+# # Images
+Login page : 
+![image](https://github.com/EliyaUYosef/books_webstore_client/assets/49410686/33a9b720-899f-486b-9967-6e78d880ea66)
 
-Contributing
-If you'd like to contribute to this project, please follow the standard Git workflow:
+Index page : 
+![image](https://github.com/EliyaUYosef/books_webstore_client/assets/49410686/53faf7f0-81c5-4c00-995a-e64a1dff387e)
 
+Result layout : 
+![image](https://github.com/EliyaUYosef/books_webstore_client/assets/49410686/1e489f32-5184-443a-bb7e-14f5759db67e)
+
+Result focus layout : 
+![image](https://github.com/EliyaUYosef/books_webstore_client/assets/49410686/9c99b839-57dd-455f-ab16-840b8283d232)
